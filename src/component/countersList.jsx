@@ -12,7 +12,7 @@ const CountersList = () => {
 
     const [counters, setCounters] = useState(initialState);
     const handleDelete = (id) => {
-        const newCounters = initialState.filter((count) => count.id !== id)
+        const newCounters = counters.filter((count) => count.id !== id)
         setCounters(newCounters);
     };
 
@@ -21,7 +21,7 @@ const CountersList = () => {
     };
 
     const handleIncrement = (id) => {
-        const newIncrement = initialState.map((count) => {
+        const newIncrement = counters.map((count) => {
             if (count.id === id) {
                 count.value += 1;
             } else {
@@ -32,14 +32,28 @@ const CountersList = () => {
 
     };
 
-    const handleDecrement = () => {
-        setCounters( prevState => prevState - 1);
+    const handleDecrement = (id) => {
+        const newDecrement = counters.map((count) => {
+            if (count.id === id && count.value > 0) {
+                count.value = count.value - 1;
+            } else {
+                return count;
+            }
+        })
+        setCounters(newDecrement);
     };
 
     return (
         <>
-            {counters.map((count) => (
-                <Counter key={count.id}  onDelete={handleDelete} onIncrement={handleIncrement} onDecrement={handleDecrement} {...count} />
+            {counters.map((count) =>
+                (
+                <Counter
+                    key={count.id}
+                    onDelete={handleDelete}
+                    onIncrement={handleIncrement}
+                    onDecrement={handleDecrement}
+                    {...count}
+                />
                 ))}
 
             <button className='btn btn-primary btn-sm m-2' onClick={handleReset}>Сброс</button>
